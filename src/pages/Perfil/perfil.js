@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Perfil.module.css";
 import logo from "../../assets/logo.png";
+import { parseISO, compareDesc } from 'date-fns';
 
 const PostsPerfil = () => {
   const [user, setUser] = useState(null);
@@ -31,32 +32,38 @@ const PostsPerfil = () => {
       const response = await axios.get(
         "https://sunguard-backend.vercel.app/sensors"
       );
+  
       const sortedData = response.data
-        .sort((a, b) => new Date(b.data) - new Date(a.data))
-        .slice(0, 3);
-      setData(sortedData);
+      .sort((a, b) => compareDesc(parseISO(b.data), parseISO(a.data)))
+      .slice(0, 3);
+
+      
+      // Verifique se os dados realmente mudaram
+      if (JSON.stringify(sortedData) !== JSON.stringify(data)) {
+        setData(sortedData); // Atualiza o estado somente se os dados forem diferentes
+      }
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('userEmail');
-    setUser(null); // Clear user state on logout
+    setUser(null); 
     navigate('/');
   };
 
+  
   useEffect(() => {
-
-    carregarUsuarioLogado();
-    fetchData();
-
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 5000);
-
-    return () => clearInterval(intervalId);
+    carregarUsuarioLogado(); // Carregar o usuário logado
+    fetchData(); // Buscar os dados iniciais
+  
+    // Atualizar os dados a cada 5 segundos
+    const intervalId = setInterval(fetchData, 5000);
+  
+    return () => clearInterval(intervalId); // Limpar o intervalo ao desmontar o componente
   }, []);
 
   return (
@@ -66,8 +73,10 @@ const PostsPerfil = () => {
           <h1>Perfil</h1>
           <img className={styles.logo} src={logo} alt="Logo" />
           <button className={styles.button} onClick={handleLogout} >
+            
             Sair
           </button>
+          <button className={styles.button2} onClick={() => navigate("/Painel")}>Ver Mais Gráficos</button>
         </div>
         <div className={styles.infos}>
           {user ? (

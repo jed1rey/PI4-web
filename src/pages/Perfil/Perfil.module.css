@@ -13,7 +13,6 @@
   .container {
     display: flex;
     flex-direction: column  ;
-    justify-content:;
     padding: 20px;
     background: #ffffff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -43,8 +42,21 @@
   
   .button {
 
-    background-color: #000080;
-    color: #ffffff;
+    background-color: #ff7f2aff;
+    color: #000080ff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 150px;
+    height: 40px;
+    margin-right: 50px;
+    
+  }
+  .button2 {
+
+    background-color: #ffcc00ff;
+    color: #000080ff;
     border: none;
     border-radius: 4px;
     cursor: pointer;

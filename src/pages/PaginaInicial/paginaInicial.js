@@ -24,7 +24,6 @@ const PaginaInicial = () => {
           );
     
           if (usuarioAutenticado) {
-            // Salva uma chave de autenticação no localStorage (simulação)
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userEmail', email); // Salva o email do usuário logado
     
